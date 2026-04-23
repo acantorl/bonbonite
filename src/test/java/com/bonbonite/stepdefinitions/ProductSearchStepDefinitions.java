@@ -31,7 +31,6 @@ public class ProductSearchStepDefinitions {
     @Then("the user should see results related to {string}")
     public void verifyResults(String textoEsperado) {
         OnStage.theActorInTheSpotlight().should(
-                // Usamos equalToIgnoringCase para que no falle por Mayúsculas/Minúsculas
                 seeThat(ValidarFiltros.elTextoFiltros(), equalToIgnoringCase(textoEsperado))
         );
     }

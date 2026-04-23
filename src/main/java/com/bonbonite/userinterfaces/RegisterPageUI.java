@@ -19,12 +19,9 @@ public class RegisterPageUI {
     public static final Target CAMPO_CONTRASEÑA = Target.the("campo de contraseña ")
             .located(By.cssSelector("#form-register #reg_password"));
 
-
-
     public static final Target CAMPO_COMFIRMAR_CONTRASEÑA = Target.the("campo de confirmar contraseña ")
             .located(By.cssSelector("#form-register #reg_password2"));
 
-    // CORREGIDO: Añadí el ID correspondiente (newsletter)
     public static final Target CHECK_INFO_ = Target.the("check de información")
             .located(By.cssSelector("#form-register #newsletter_authorization"));
 
@@ -34,14 +31,7 @@ public class RegisterPageUI {
     public static final Target BOTON_REGISTRARME = Target.the("botón de registrarme ")
             .located(By.cssSelector("#form-register button[name='register']"));
 
-
-
-
-
-
     public static final Target TEXTO_CONFIRMACIÓN_USUARIO = Target.the("texto de confirmación")
             .locatedBy("//h4[contains(text(), 'ningún pedido')]");
-
-
 
 }

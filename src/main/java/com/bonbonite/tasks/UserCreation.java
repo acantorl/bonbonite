@@ -21,7 +21,6 @@ import static com.bonbonite.userinterfaces.HomePageUI.*;
 
 public class UserCreation implements Task {
 
-    // Listas para generar nombres realistas en español
     private static final String[] NOMBRES_ES = {"adrian", "carlos", "juan", "diego", "luis", "marta", "elena", "sofia", "pablo", "lucia"};
     private static final String[] APELLIDOS_ES = {"cantor", "perez", "rodriguez", "lopez", "garcia", "gomez", "sanchez", "diaz", "torres", "ruiz"};
 
@@ -31,47 +30,38 @@ public class UserCreation implements Task {
 
         Random random = new Random();
 
-        // Selección aleatoria de nombre y apellido
         String nombre = NOMBRES_ES[random.nextInt(NOMBRES_ES.length)];
         String apellido = APELLIDOS_ES[random.nextInt(APELLIDOS_ES.length)];
 
-        // Formato: nombre.apellido + 3 números aleatorios para evitar duplicados en la BD
+
         String email = nombre + "." + apellido + RandomStringUtils.randomNumeric(3) + "@hotmail.com";
 
-        // Cédula: Empieza por 1 y tiene 10 dígitos en total
         String cedula = "1" + RandomStringUtils.randomNumeric(9);
 
-        // Contraseña: 8 números + 1 Mayus + 1 minus + 1 especial
         String password = RandomStringUtils.randomNumeric(8) + "A" + "b" + "*";
 
         actor.attemptsTo(
                 Check.whether(HomePageUI.BTN_RECHAZAR_COOKIES.resolveFor(actor).isVisible())
                         .andIfSo(Click.on(HomePageUI.BTN_RECHAZAR_COOKIES)),
-
                 Click.on(BTN_MI_CUENTA),
                 WaitUntil.the(REGISTER_LINK, isClickable()).forNoMoreThan(10).seconds(),
                 Click.on(REGISTER_LINK),
-
                 Enter.theValue(cedula).into(CAMPO_NUMERO_CEDULA),
                 Enter.theValue(nombre).into(CAMPO_NOMBRES),
                 Enter.theValue(apellido).into(CAMPO_APELLIDOS),
                 Enter.theValue(email).into(CAMPO_EMAIL),
                 Enter.theValue(password).into(CAMPO_CONTRASEÑA),
                 Enter.theValue(password).into(CAMPO_COMFIRMAR_CONTRASEÑA),
-
                 WaitUntil.the(CHECK_INFO_, isVisible()),
                 Esperar.por(1000),
                 Click.on(CHECK_INFO_),
-
                 WaitUntil.the(CHECK_AUTORIZACIÓN, isVisible()),
                 Esperar.por(1000),
                 Click.on(CHECK_AUTORIZACIÓN),
-
                 Esperar.por(1000),
                 Click.on(BOTON_REGISTRARME)
         );
     }
-
     public static UserCreation withRandomData() {
         return instrumented(UserCreation.class);
     }

@@ -23,7 +23,6 @@ public class ChangePassword implements Task {
         this.newPassword = newPassword;
     }
 
-    // Cambiamos el nombre del método a "de" para que se lea: ChangePassword.de(actual, nueva)
     public static ChangePassword de(String oldPassword, String newPassword) {
         return instrumented(ChangePassword.class, oldPassword, newPassword);
     }
@@ -35,14 +34,11 @@ public class ChangePassword implements Task {
                 WaitUntil.the(BTN_OPCION_DATOS, isVisible()).forNoMoreThan(20).seconds(),
                 Scroll.to(BTN_OPCION_DATOS),
                 JavaScriptClick.on(BTN_OPCION_DATOS),
-
                 WaitUntil.the(BTN_ACTUALIZAR_CONTRASENA, isClickable()).forNoMoreThan(10).seconds(),
                 JavaScriptClick.on(BTN_ACTUALIZAR_CONTRASENA),
-
                 Enter.theValue(oldPassword).into(CAMPO_CONTRASENA_ACTUAL),
                 Enter.theValue(newPassword).into(CAMPO_NUEVA_CONTRASENA),
                 Enter.theValue(newPassword).into(CAMPO_REPETIR_NUEVA_CONTRASENA),
-
                 JavaScriptClick.on(BTN_GUARDAR_CONTRASENA)
         );
     }

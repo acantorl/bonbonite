@@ -15,7 +15,6 @@ public class ValidarTextoCart implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        // Espera explícita corta por si el DOM se demora en renderizar el alert
         actor.attemptsTo(
                 WaitUntil.the(PdpPageUI.MSG_SE_AÑADIDO_A_TU_CARRITO, isVisible()).forNoMoreThan(5).seconds()
         );

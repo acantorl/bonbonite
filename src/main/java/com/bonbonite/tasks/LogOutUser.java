@@ -13,7 +13,6 @@ public class LogOutUser implements Task {
 
     public static LogOutUser asUser() {
         return instrumented(LogOutUser.class);
-
     }
 
     @Override
@@ -21,8 +20,6 @@ public class LogOutUser implements Task {
         actor.attemptsTo(
                 Click.on(BTN_LOGO_USUARIO),
                 Click.on(BTN_LOGOUT)
-
         );
-
     }
 }

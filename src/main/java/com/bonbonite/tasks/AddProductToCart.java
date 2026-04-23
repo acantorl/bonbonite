@@ -32,11 +32,9 @@ public class AddProductToCart implements Task
                 WaitUntil.the(FIRST_CARD_TENNIS, isClickable()).forNoMoreThan(20).seconds(),
                 Click.on(FIRST_CARD_TENNIS),
                 JavaScriptClick.on(SIZE_SHOE),
-                // Una pequeña pausa técnica de 1 segundo para que el script de la página reaccione
-                Hit.the(Keys.ESCAPE).into(SIZE_SHOE), // Esto a veces ayuda a refrescar el estado del DOM
+                Hit.the(Keys.ESCAPE).into(SIZE_SHOE),
                 WaitUntil.the(BTN_AÑADIR_AL_CARRITO, isEnabled()),
                 JavaScriptClick.on(BTN_AÑADIR_AL_CARRITO)
         );
-
     }
 }

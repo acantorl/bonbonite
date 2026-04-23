@@ -17,13 +17,11 @@ public class CreationUserStepDefinitions {
 
     @Before
     public void setTheStage() {
-        // Prepara el escenario con un elenco de actores que pueden navegar en la web
         OnStage.setTheStage(new OnlineCast());
     }
 
     @When("they register a user account")
     public void registerUserAccount() {
-        // El actor en escena ejecuta la tarea de creación de usuario con datos aleatorios
         theActorInTheSpotlight().attemptsTo(
                 UserCreation.withRandomData()
         );
@@ -31,7 +29,6 @@ public class CreationUserStepDefinitions {
 
     @Then("the orders section must indicate {string}")
     public void verifyRegistrationMessage(String message) {
-        // Se realiza la verificación (Question) sobre el elemento de confirmación esperado
         theActorInTheSpotlight().should(
                 seeThat("El mensaje de confirmación de registro",
                         WebElementQuestion.the(MyAccountPageUI.TEXTO_CONFIRMACIÓN_USUARIO),

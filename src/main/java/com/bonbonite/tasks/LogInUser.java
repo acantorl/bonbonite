@@ -20,14 +20,12 @@ public class LogInUser implements Task {
     private final String cedula;
     private final String password;
 
-    // Constructor necesario para que instrumented funcione
     public LogInUser(String cedula, String password) {
-        this.cedula = cedula; // Usa el valor que viene del Feature
+        this.cedula = cedula;
         this.password = password;
     }
 
     public static LogInUser conCredenciales(String cedula, String password) {
-        // El 'return' que faltaba
         return instrumented(LogInUser.class, cedula, password);
     }
 

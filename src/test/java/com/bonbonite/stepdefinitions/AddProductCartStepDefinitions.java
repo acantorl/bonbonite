@@ -26,7 +26,6 @@ public class AddProductCartStepDefinitions {
 
     @Then("the PLP page should display the message {string}")
     public void thePLPPageShouldDisplayTheMessage(String textoEsperado) {
-        // Limpiamos el texto del feature (quitamos puntos extra)
         String mensajeClave = textoEsperado.replace(".", "").trim();
 
         OnStage.theActorInTheSpotlight().should(

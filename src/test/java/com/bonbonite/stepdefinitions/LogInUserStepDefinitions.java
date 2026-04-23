@@ -33,13 +33,11 @@ public class LogInUserStepDefinitions {
 
     @Then("he should see a message related to {string}")
     public void verifyLoginMessage(String message) {
-        // ESTA LÍNEA ES CLAVE: Espera a que el login termine y aparezca el dashboard
         theActorInTheSpotlight().attemptsTo(
                 WaitUntil.the(MyAccountPageUI.TEXTO_CONFIRMACIÓN_USUARIO, isVisible())
                         .forNoMoreThan(15).seconds()
         );
 
-        // Ahora sí validamos
         theActorInTheSpotlight().should(
                 seeThat("El mensaje de pedidos en el dashboard",
                         Text.of(MyAccountPageUI.TEXTO_CONFIRMACIÓN_USUARIO),

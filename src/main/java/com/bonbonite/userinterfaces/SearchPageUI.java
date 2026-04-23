@@ -15,5 +15,4 @@ public class SearchPageUI {
     public static final Target BTN_WHATSAPP = Target.the("botón de whatsapp")
             .located(By.id("whats"));
 
-
 }
