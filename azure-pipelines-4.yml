@@ -1,0 +1,41 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# 1. Forzamos Java 21 (según tu terminal local)
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+# 2. Permisos de ejecución
+- script: chmod +x gradlew
+  displayName: 'Permitir ejecución de gradlew'
+
+# 3. Tarea de Gradle corregida
+- task: Gradle@3
+  displayName: 'Ejecutar Pruebas de Serenity'
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    # IMPORTANTE: Dejamos las tareas explícitas
+    tasks: 'clean test aggregate'
+    # Forzamos a que NO use las opciones de JVM automáticas que están fallando
+    publishJUnitResults: true
+    testResultsFiles: '**/build/test-results/**/*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.21' # Esto debe coincidir con el instalador de arriba
+    # Esta línea es clave para evitar el error del -Xmx3072m:
+    options: '' 
+
+# 4. Subir reporte solo si se llegó a generar algo
+- task: PublishPipelineArtifact@1
+  displayName: 'Subir Reporte Serenity'
+  condition: always() # Lo intentamos siempre para ver qué se generó
+  inputs:
+    targetPath: 'target/site/serenity'
+    artifact: 'SerenityReport'
+    publishLocation: 'pipeline'

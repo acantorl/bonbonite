@@ -1,0 +1,41 @@
+trigger:
+- main  # Cambia a 'master' si ese es el nombre de tu rama principal
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# Paso 1: Configurar Java 21 (según tu terminal)
+- task: JavaToolInstaller@0
+  displayName: 'Instalar Java 21'
+  inputs:
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+# Paso 2: Permisos para ejecutar el wrapper en el agente de Linux
+- script: chmod +x gradlew
+  displayName: 'Permitir ejecución de gradlew'
+
+# Paso 3: Ejecutar pruebas con Gradle
+# Usamos 'clean test aggregate' para que Serenity genere el reporte HTML al finalizar
+- task: Gradle@3
+  displayName: 'Ejecutar Automatización (Screenplay)'
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: 'clean test aggregate' 
+    publishJUnitResults: true
+    testResultsFiles: '**/build/test-results/**/*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.21' # Coincide con tu versión instalada
+    sonarQubeRunAnalysis: false
+
+# Paso 4: Publicar el reporte de Serenity (HTML) como un artefacto del build
+# Esto te permite descargar el reporte visual después de cada ejecución
+- task: PublishHtmlReport@1
+  displayName: 'Publicar Reporte Serenity'
+  condition: succeededOrFailed() # Se ejecuta aunque fallen las pruebas
+  inputs:
+    reportDir: 'target/site/serenity'
+    reportStartFile: 'index.html'
+    reportName: 'Serenity BDD Report'
