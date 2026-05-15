@@ -1,18 +1,18 @@
 package com.bonbonite.tasks;
 
-import com.bonbonite.interactions.Esperar;
 import com.bonbonite.userinterfaces.HomePageUI;
+import com.bonbonite.userinterfaces.LogInPageUI;
+import com.bonbonite.userinterfaces.MyAccountPageUI;
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
-import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.conditions.Check;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 
-import static com.bonbonite.userinterfaces.LogInPageUI.*;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
-import static com.bonbonite.userinterfaces.HomePageUI.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
 
 public class LogInUser implements Task {
@@ -32,18 +32,37 @@ public class LogInUser implements Task {
     @Override
     @Step("{0} inicia sesión con cédula #cedula")
     public <T extends Actor> void performAs(T actor) {
-        String username;
         actor.attemptsTo(
+                // 1. Asegurar visibilidad inicial de la página (Previene Timeouts prematuros)
+                WaitUntil.the(HomePageUI.BTN_MI_CUENTA, isVisible()).forNoMoreThan(15).seconds(),
+
+                // 2. Manejo de cookies (Solo si aparecen)
                 Check.whether(HomePageUI.BTN_RECHAZAR_COOKIES.resolveFor(actor).isVisible())
                         .andIfSo(Click.on(HomePageUI.BTN_RECHAZAR_COOKIES)),
-                Click.on(BTN_MI_CUENTA),
-                Enter.theValue(cedula).into(CAMPO_LOGIN_CEDULA),
-                Enter.theValue(password).into(CAMPO_LOGIN_PASSWORD),
-                Esperar.por(1000),
-                Click.on(CHK_RECUERDAME),
-                Esperar.por(1000),
-                WaitUntil.the(BTN_INICIAR_SESION, isVisible()),
-                Click.on(BTN_INICIAR_SESION)
+
+                // 3. Limpieza de sesión (Solución para el fallo de Password)
+                // Si el botón de cerrar sesión es visible, significa que la sesión quedó abierta del test anterior
+                Check.whether(MyAccountPageUI.BTN_LOGOUT.resolveFor(actor).isVisible())
+                        .andIfSo(
+                                Click.on(MyAccountPageUI.BTN_LOGOUT),
+                                WaitUntil.the(HomePageUI.BTN_MI_CUENTA, isVisible())
+                        ),
+
+                // 4. Navegación al Formulario de Login
+                WaitUntil.the(HomePageUI.BTN_MI_CUENTA, isClickable()).forNoMoreThan(10).seconds(),
+                Click.on(HomePageUI.BTN_MI_CUENTA),
+
+                // 5. Diligenciamiento del Formulario
+                WaitUntil.the(LogInPageUI.CAMPO_LOGIN_CEDULA, isVisible()).forNoMoreThan(10).seconds(),
+                Enter.theValue(cedula).into(LogInPageUI.CAMPO_LOGIN_CEDULA),
+                Enter.theValue(password).into(LogInPageUI.CAMPO_LOGIN_PASSWORD),
+
+                // 6. Interacción con Checkbox y Envío
+                WaitUntil.the(LogInPageUI.CHK_RECUERDAME, isClickable()),
+                Click.on(LogInPageUI.CHK_RECUERDAME),
+
+                WaitUntil.the(LogInPageUI.BTN_INICIAR_SESION, isClickable()),
+                Click.on(LogInPageUI.BTN_INICIAR_SESION)
         );
     }
 }

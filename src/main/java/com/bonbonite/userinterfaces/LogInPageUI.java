@@ -5,7 +5,8 @@ import org.openqa.selenium.By;
 
 public class LogInPageUI {
 
-
+    public static final Target BOTON_REGISTRARME = Target.the("botón de registrarme ")
+            .located(By.id("show_register"));
 
 
     public static final Target CAMPO_LOGIN_CEDULA = Target.the("campo cédula login")

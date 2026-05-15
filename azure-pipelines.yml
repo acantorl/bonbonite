@@ -1,22 +1,39 @@
-# Gradle
-# Build your Java project and run tests with Gradle using a Gradle wrapper script.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
-- main
+  - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
-- task: Gradle@3
-  inputs:
-    gradleWrapperFile: 'gradlew'  # Path to your Gradle wrapper
-    tasks: 'build'  # Replace with the tasks you want to run
-    options: '-Xmx3072m' 
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'  # Updated pattern for test result files
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'  # Replace with your JDK version
-    jdkArchitectureOption: 'x64'
+  # 1. Forzar Java 21 para que coincida con tu build.gradle
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '21'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
+
+  # 2. Permisos
+  - script: chmod +x gradlew
+    displayName: 'Permitir ejecución de gradlew'
+
+  # 3. Tarea de Gradle corregida
+  - task: Gradle@3
+    displayName: 'Ejecutar Pruebas de Serenity'
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'clean test aggregate'
+      publishJUnitResults: true
+      testResultsFiles: '**/build/test-results/**/*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.21' # Importante: 1.21 para referenciar Java 21
+      # ESTA LÍNEA ELIMINA EL ERROR DEL -Xmx3072m
+      options: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxMetaspaceSize=512m"'
+
+  # 4. Artefactos
+  - task: PublishPipelineArtifact@1
+    displayName: 'Subir Reporte Serenity'
+    condition: always()
+    inputs:
+      targetPath: 'target/site/serenity'
+      artifact: 'SerenityReport'
+      publishLocation: 'pipeline'

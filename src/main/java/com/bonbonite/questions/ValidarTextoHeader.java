@@ -11,9 +11,9 @@ public class ValidarTextoHeader implements Question<String> {
         return new ValidarTextoHeader();
     }
 
-
     @Override
     public String answeredBy(Actor actor) {
+        // Captura el texto de la barra superior (Header Bar)
         return Text.of(HomePageUI.HEADER_MSG_BAR).answeredBy(actor);
     }
 }

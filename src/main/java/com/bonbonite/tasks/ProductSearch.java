@@ -10,14 +10,14 @@ import net.serenitybdd.screenplay.conditions.Check;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 public class ProductSearch implements Task {
-    private final String producto;
+    private final String product;
 
-    public ProductSearch(String producto) {
-        this.producto = producto;
+    public ProductSearch(String product) {
+        this.product = product;
     }
 
-    public static ProductSearch conNombre(String producto) {
-        return instrumented(ProductSearch.class, producto);
+    public static ProductSearch conNombre(String product) {
+        return instrumented(ProductSearch.class, product);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ProductSearch implements Task {
                 Check.whether(HomePageUI.BTN_RECHAZAR_COOKIES.resolveFor(actor).isVisible())
                         .andIfSo(Click.on(HomePageUI.BTN_RECHAZAR_COOKIES)),
                 Click.on(HomePageUI.BTN_LUPA),
-                Enter.theValue(producto).into(SearchPageUI.INPUT_BUSQUEDA),
+                Enter.theValue(product).into(SearchPageUI.INPUT_BUSQUEDA),
                 Click.on(SearchPageUI.BTN_BUSCAR)
         );
     }

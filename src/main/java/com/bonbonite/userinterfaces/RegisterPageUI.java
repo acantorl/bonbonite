@@ -7,6 +7,9 @@ public class RegisterPageUI {
 
 
 
+    public static final Target CAMPO_CEDULA = Target.the("campo de cédula")
+            .located(By.cssSelector("#form-register #reg_username"));
+
     public static final Target CAMPO_NOMBRES = Target.the("campo de nombres")
             .located(By.cssSelector("#form-register #first_name"));
 
@@ -28,10 +31,11 @@ public class RegisterPageUI {
     public static final Target CHECK_AUTORIZACIÓN = Target.the("check de autorización ")
             .located(By.cssSelector("#form-register #privacy_policy_reg"));
 
-    public static final Target BOTON_REGISTRARME = Target.the("botón de registrarme ")
-            .located(By.cssSelector("#form-register button[name='register']"));
 
-    public static final Target TEXTO_CONFIRMACIÓN_USUARIO = Target.the("texto de confirmación")
-            .locatedBy("//h4[contains(text(), 'ningún pedido')]");
+    public static final Target BOTON_REGISTRARME_FINAL = Target.the("botón final de registrarme")
+            .located(By.name("register"));
+
+
+
 
 }

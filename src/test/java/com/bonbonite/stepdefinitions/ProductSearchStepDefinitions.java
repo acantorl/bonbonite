@@ -24,8 +24,8 @@ public class ProductSearchStepDefinitions {
     }
 
     @When("the user search for the product {string}")
-    public void searchForProduct(String producto) {
-        OnStage.theActorInTheSpotlight().attemptsTo(ProductSearch.conNombre(producto));
+    public void searchForProduct(String product) {
+        OnStage.theActorInTheSpotlight().attemptsTo(ProductSearch.conNombre(product));
     }
 
     @Then("the user should see results related to {string}")
