@@ -2,38 +2,18 @@ trigger:
   - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 steps:
-  # 1. Forzar Java 21 para que coincida con tu build.gradle
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: '21'
-      jdkArchitectureOption: 'x64'
-      jdkSourceOption: 'PreInstalled'
-
-  # 2. Permisos
-  - script: chmod +x gradlew
-    displayName: 'Permitir ejecución de gradlew'
-
-  # 3. Tarea de Gradle corregida
   - task: Gradle@3
-    displayName: 'Ejecutar Pruebas de Serenity'
     inputs:
       gradleWrapperFile: 'gradlew'
-      tasks: 'clean test aggregate'
+      tasks: 'clean build'  # Añadido 'clean' para asegurar un build limpio en el pipeline
       publishJUnitResults: true
-      testResultsFiles: '**/build/test-results/**/*.xml'
+      testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.21' # Importante: 1.21 para referenciar Java 21
-      # ESTA LÍNEA ELIMINA EL ERROR DEL -Xmx3072m
-      options: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxMetaspaceSize=512m"'
-
-  # 4. Artefactos
-  - task: PublishPipelineArtifact@1
-    displayName: 'Subir Reporte Serenity'
-    condition: always()
-    inputs:
-      targetPath: 'target/site/serenity'
-      artifact: 'SerenityReport'
-      publishLocation: 'pipeline'
+      jdkVersionOption: '1.21'  # ¡Actualizado a Java 21 para hacer match con tu proyecto!
+      jdkArchitectureOption: 'x64'
+    env:
+      # Asignación correcta de memoria para evitar fallos de Heap en el agente Linux
+      GRADLE_OPTS: '-Xmx3072m -XX:MaxMetaspaceSize=512m'
