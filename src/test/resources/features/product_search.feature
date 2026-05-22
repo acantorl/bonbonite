@@ -1,7 +1,7 @@
 @E2E @Search
 Feature: Check product availability
 
-  @SuccessfulSearch @Sanity @Regression
+  @SuccessfulSearch @Sanity
   Scenario Outline: Successful product search for different categories
     Given that the user navigates to the online store
     When the user search for the product "<product>"

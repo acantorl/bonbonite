@@ -1,7 +1,7 @@
 @E2E @Auth
 Feature: Login
 
-  @SuccessfulLogin @Smoke @Regression
+  @SuccessfulLogin @Smoke
   Scenario Outline: Successful Login with existing credentials
     Given that the user navigates to the online store
     When he logs in with credentials "<user>" and "<password>"

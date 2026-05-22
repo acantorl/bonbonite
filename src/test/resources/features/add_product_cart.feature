@@ -1,7 +1,7 @@
 @E2E @Shopping @Cart
 Feature: Add product to cart
 
-  @SuccessfulAddToCart @Smoke @Regression
+  @SuccessfulAddToCart @Smoke
   Scenario: Successful addition of product to cart
     Given that the user navigates to the online store
     When the user search for the product "tenis"

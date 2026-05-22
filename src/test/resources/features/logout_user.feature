@@ -1,7 +1,7 @@
 @E2E @Auth
 Feature: Logout
 
-  @SuccessfulLogout @Sanity @Regression
+  @SuccessfulLogout @Sanity
   Scenario Outline: Successful Logout with Existing Data
     Given that the user navigates to the online store
     When he logs in with credentials "<user>" and "<password>"

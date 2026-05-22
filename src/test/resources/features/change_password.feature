@@ -1,7 +1,7 @@
 @E2E @Account @Password
 Feature: Change password
 
-  @SuccessfulPasswordChange @Regression @Security
+  @SuccessfulPasswordChange @Security
   Scenario: Successful change and reset of password
     Given that the user navigates to the online store
     When he logs in with credentials "12345678900" and "12345678900Aa.."
