@@ -8,7 +8,7 @@ steps:
   - task: Gradle@3
     inputs:
       gradleWrapperFile: 'gradlew'
-      # Filtra directamente por el Tag de Cucumber que ya tiene tu escenario
+      # Se mantiene intacta tu tarea con el tag que ya funciona
       tasks: 'clean test -Dcucumber.filter.tags="@SuccessfulLogin"'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
@@ -18,10 +18,11 @@ steps:
     env:
       GRADLE_OPTS: '-Xmx3072m -XX:MaxMetaspaceSize=512m'
 
-
-  - task: PublishHtmlReport@1
-    displayName: 'Publicar Reporte de Serenity BDD'
+  # REEMPLAZO: Tarea nativa de Azure para publicar el reporte de Serenity
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publicar Reporte HTML de Serenity'
     inputs:
-      reportDir: 'target/site/serenity'
-      tabName: 'Serenity Report'
-    condition: always() # Esto asegura que el reporte se publique así la prueba falle o pase
+      targetPath: 'target/site/serenity' # Ruta donde Serenity genera el HTML
+      artifact: 'SerenityReport'         # Nombre del contenedor en Azure
+      publishLocation: 'pipeline'
+    condition: always() # Se ejecuta siempre, sin importar si los tests pasaron o fallaron
