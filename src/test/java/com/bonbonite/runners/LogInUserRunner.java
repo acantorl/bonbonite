@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
-        plugin = {"pretty"},
+        plugin = {"pretty", "junit:target/junit-reports/TEST-cucumber.xml"},
         features = "src/test/resources/features/login_user.feature",
         glue = "com.bonbonite.stepdefinitions",
         snippets = CucumberOptions.SnippetType.CAMELCASE
