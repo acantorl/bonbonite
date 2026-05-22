@@ -9,7 +9,7 @@ steps:
     inputs:
       gradleWrapperFile: 'gradlew'
       # Se mantiene intacta tu tarea con el tag que ya funciona
-      tasks: 'clean test -Dcucumber.filter.tags="@SuccessfulLogin"'
+      tasks: 'clean test'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
