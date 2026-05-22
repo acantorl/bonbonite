@@ -9,4 +9,4 @@ Feature: Login
 
     Examples:
       | user      | password        | expected_message                   |
-      | 12345678900 | 12345678900Aa.. | No has realizado ningún pedido aún |
+      | 1414141414 | 123456789Aa..@ | No has realizado ningún pedido aún |

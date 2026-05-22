@@ -9,5 +9,5 @@ Feature: Logout
     Then he should see a header message related to "<expected_message>"
 
     Examples:
-      | user      | password        | expected_message                     |
-      | 12345678900 | 12345678900Aa.. | Hecho a mano en Colombia desde 1979 |
+      | user       | password       | expected_message                    |
+      | 1414141414 | 123456789Aa..@ | Hecho a mano en Colombia desde 1979 |
