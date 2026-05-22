@@ -8,12 +8,12 @@ steps:
   - task: Gradle@3
     inputs:
       gradleWrapperFile: 'gradlew'
-      tasks: 'clean test --tests "com.bonbonite.runners.LogInUserRunner"'  # se ajustó para que solo corra login.feature
+      # Filtra directamente por el Tag de Cucumber que ya tiene tu escenario
+      tasks: 'clean test -Dcucumber.filter.tags="@SuccessfulLogin"'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.21'  # ¡Actualizado a Java 21 para hacer match con tu proyecto!
+      jdkVersionOption: '1.21'
       jdkArchitectureOption: 'x64'
     env:
-      # Asignación correcta de memoria para evitar fallos de Heap en el agente Linux
       GRADLE_OPTS: '-Xmx3072m -XX:MaxMetaspaceSize=512m'
