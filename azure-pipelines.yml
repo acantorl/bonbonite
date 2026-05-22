@@ -17,3 +17,11 @@ steps:
       jdkArchitectureOption: 'x64'
     env:
       GRADLE_OPTS: '-Xmx3072m -XX:MaxMetaspaceSize=512m'
+
+
+  - task: PublishHtmlReport@1
+    displayName: 'Publicar Reporte de Serenity BDD'
+    inputs:
+      reportDir: 'target/site/serenity'
+      tabName: 'Serenity Report'
+    condition: always() # Esto asegura que el reporte se publique así la prueba falle o pase
