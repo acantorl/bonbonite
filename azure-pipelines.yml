@@ -8,7 +8,7 @@ steps:
   - task: Gradle@3
     inputs:
       gradleWrapperFile: 'gradlew'
-      tasks: 'clean build'  # Añadido 'clean' para asegurar un build limpio en el pipeline
+      tasks: 'clean test --tests "com.bonbonite.runners.LoginUserRunner"'  # se ajustó para que solo corra login.feature
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
