@@ -1,18 +1,17 @@
-
 trigger:
   - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
+  # 1. Compilar y Ejecutar ÚNICAMENTE el feature de búsqueda de producto usando tags de Cucumber
   - task: Gradle@3
-    displayName: 'Ejecutar Pruebas y Generar Reporte de Serenity'
+    displayName: 'Ejecutar Pruebas de Búsqueda de Producto'
     inputs:
       gradleWrapperFile: 'gradlew'
-      # AGREGADO: Sumamos la tarea 'aggregate' para que Serenity junte los resultados y cree el HTML
-      tasks: 'clean test aggregate'
-      options: ''
+      # Filtramos para que corra exclusivamente los escenarios con la etiqueta @Search
+      tasks: 'clean test aggregate -Dcucumber.filter.tags="@Search"'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
@@ -21,12 +20,12 @@ steps:
     env:
       GRADLE_OPTS: '-Xmx3072m -XX:MaxMetaspaceSize=512m'
 
-  # NUEVO: Tarea para empaquetar y subir el reporte HTML a la pestaña de Azure DevOps
+  # 2. Tarea para empaquetar y subir el reporte HTML a la pestaña de Azure DevOps
   - task: PublishPipelineArtifact@1
     displayName: 'Publicar Reporte HTML de Serenity'
     inputs:
       targetPath: 'target/site/serenity' # Ruta estándar donde Serenity guarda el index.html
       artifact: 'SerenityReport'         # Nombre con el que verás el archivo descargable
       publishLocation: 'pipeline'
-    # CRÍTICO: Garantiza que el reporte se publique aunque alguna prueba falle
+    # Garantiza que el reporte se publique aunque alguna prueba falle
     condition: always()
