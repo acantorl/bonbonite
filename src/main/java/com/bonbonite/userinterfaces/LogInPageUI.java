@@ -21,6 +21,16 @@ public class LogInPageUI {
     public static final Target BTN_INICIAR_SESION = Target.the("botón Iniciar Sesión")
             .located(By.name("login"));
 
+    //public static final Target TEXT_INGRESA_A_TU_CUENTA = Target.the("texto de ingresa a tu cuenta")
+            //.locatedBy("//h2[contains(text(),'Ingresa a tu cuenta')]");
+
+
+    // Cambia tu definición actual en LogInPageUI por esta:
     public static final Target TEXT_INGRESA_A_TU_CUENTA = Target.the("texto de ingresa a tu cuenta")
-            .locatedBy("//h2[contains(text(),'Ingresa a tu cuenta')]");
+            .locatedBy("//form[contains(@class,'login')]//h2 | //h2[contains(normalize-space(.), 'Ingresa a tu cuenta')]");
+
+
+
+
+
 }

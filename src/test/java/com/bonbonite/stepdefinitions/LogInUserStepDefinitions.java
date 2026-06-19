@@ -2,17 +2,14 @@ package com.bonbonite.stepdefinitions;
 
 import com.bonbonite.questions.ValidarLogin;
 import com.bonbonite.tasks.LogInUser;
-import com.bonbonite.userinterfaces.MyAccountPageUI;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
-import net.serenitybdd.screenplay.waits.WaitUntil;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
-import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
 import static org.hamcrest.Matchers.containsString;
 
 public class LogInUserStepDefinitions {
@@ -31,11 +28,7 @@ public class LogInUserStepDefinitions {
 
     @Then("he should see a message related to {string}")
     public void verifyLoginMessage(String message) {
-        theActorInTheSpotlight().attemptsTo(
-                WaitUntil.the(MyAccountPageUI.TEXTO_CONFIRMACIÓN_USUARIO, isVisible())
-                        .forNoMoreThan(15).seconds()
-        );
-
+        // MEJORA: El Step no interactúa, delega el control de sincronización directamente a la Question
         theActorInTheSpotlight().should(
                 seeThat("El mensaje de pedidos en el dashboard",
                         ValidarLogin.elMensajeDeDashboard(),

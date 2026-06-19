@@ -33,31 +33,31 @@ public class LogInUser implements Task {
     @Step("{0} inicia sesión con cédula #cedula")
     public <T extends Actor> void performAs(T actor) {
         actor.attemptsTo(
-                // 1. Asegurar visibilidad inicial de la página (Previene Timeouts prematuros)
+                // 1. Sincronización inicial de la tienda
                 WaitUntil.the(HomePageUI.BTN_MI_CUENTA, isVisible()).forNoMoreThan(15).seconds(),
 
-                // 2. Manejo de cookies (Solo si aparecen)
+                // 2. Control preventivo de cookies
                 Check.whether(HomePageUI.BTN_RECHAZAR_COOKIES.resolveFor(actor).isVisible())
                         .andIfSo(Click.on(HomePageUI.BTN_RECHAZAR_COOKIES)),
 
-                // 3. Limpieza de sesión (Solución para el fallo de Password)
-                // Si el botón de cerrar sesión es visible, significa que la sesión quedó abierta del test anterior
-                Check.whether(MyAccountPageUI.BTN_LOGOUT.resolveFor(actor).isVisible())
-                        .andIfSo(
-                                Click.on(MyAccountPageUI.BTN_LOGOUT),
-                                WaitUntil.the(HomePageUI.BTN_MI_CUENTA, isVisible())
-                        ),
-
-                // 4. Navegación al Formulario de Login
+                // MEJORA: Navegamos primero para validar con certeza el estado de la sesión
                 WaitUntil.the(HomePageUI.BTN_MI_CUENTA, isClickable()).forNoMoreThan(10).seconds(),
                 Click.on(HomePageUI.BTN_MI_CUENTA),
 
-                // 5. Diligenciamiento del Formulario
+                // 3. Limpieza del estado de sesión (Solo si se requiere)
+                Check.whether(MyAccountPageUI.BTN_LOGOUT.resolveFor(actor).isVisible())
+                        .andIfSo(
+                                Click.on(MyAccountPageUI.BTN_LOGOUT),
+                                WaitUntil.the(HomePageUI.BTN_MI_CUENTA, isVisible()),
+                                Click.on(HomePageUI.BTN_MI_CUENTA)
+                        ),
+
+                // 4. Ingreso de Datos seguros
                 WaitUntil.the(LogInPageUI.CAMPO_LOGIN_CEDULA, isVisible()).forNoMoreThan(10).seconds(),
                 Enter.theValue(cedula).into(LogInPageUI.CAMPO_LOGIN_CEDULA),
                 Enter.theValue(password).into(LogInPageUI.CAMPO_LOGIN_PASSWORD),
 
-                // 6. Interacción con Checkbox y Envío
+                // 5. Envío del formulario
                 WaitUntil.the(LogInPageUI.CHK_RECUERDAME, isClickable()),
                 Click.on(LogInPageUI.CHK_RECUERDAME),
 

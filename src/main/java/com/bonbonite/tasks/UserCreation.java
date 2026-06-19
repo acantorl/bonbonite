@@ -1,14 +1,13 @@
 package com.bonbonite.tasks;
 
-import com.bonbonite.interactions.Esperar;
 import com.bonbonite.userinterfaces.HomePageUI;
-import com.bonbonite.userinterfaces.LogInPageUI;
 import com.bonbonite.userinterfaces.RegisterPageUI;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.JavaScriptClick; // <-- Importación clave
 import net.serenitybdd.screenplay.actions.Scroll;
 import net.serenitybdd.screenplay.conditions.Check;
 import net.serenitybdd.screenplay.waits.WaitUntil;
@@ -16,7 +15,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Random;
 
-import static com.bonbonite.userinterfaces.LogInPageUI.BOTON_REGISTRARME;
 import static com.bonbonite.userinterfaces.LogInPageUI.BOTON_REGISTRARME;
 import static com.bonbonite.userinterfaces.RegisterPageUI.BOTON_REGISTRARME_FINAL;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
@@ -51,6 +49,8 @@ public class UserCreation implements Task {
                 WaitUntil.the(BOTON_REGISTRARME, isClickable()).forNoMoreThan(10).seconds(),
                 Click.on(BOTON_REGISTRARME),
 
+                WaitUntil.the(RegisterPageUI.CAMPO_CEDULA, isVisible()).forNoMoreThan(10).seconds(),
+
                 Enter.theValue(cedula).into(RegisterPageUI.CAMPO_CEDULA),
                 Enter.theValue(nombre).into(RegisterPageUI.CAMPO_NOMBRES),
                 Enter.theValue(apellido).into(RegisterPageUI.CAMPO_APELLIDOS),
@@ -58,15 +58,17 @@ public class UserCreation implements Task {
                 Enter.theValue(password).into(RegisterPageUI.CAMPO_CONTRASEÑA),
                 Enter.theValue(password).into(RegisterPageUI.CAMPO_COMFIRMAR_CONTRASEÑA),
 
-                // Reemplazamos esperas fijas por esperas de estado
-                WaitUntil.the(RegisterPageUI.CHECK_INFO_, isClickable()),
-                Click.on(RegisterPageUI.CHECK_INFO_),
+                Scroll.to(BOTON_REGISTRARME_FINAL),
 
-                WaitUntil.the(RegisterPageUI.CHECK_AUTORIZACIÓN, isClickable()),
-                Click.on(RegisterPageUI.CHECK_AUTORIZACIÓN),
+                // SOLUCIÓN: Cambiamos Click.on por JavaScriptClick.on para evadir la obstrucción del message_bar
+                WaitUntil.the(RegisterPageUI.CHECK_INFO_, isVisible()),
+                JavaScriptClick.on(RegisterPageUI.CHECK_INFO_),
+
+                WaitUntil.the(RegisterPageUI.CHECK_AUTORIZACIÓN, isVisible()),
+                JavaScriptClick.on(RegisterPageUI.CHECK_AUTORIZACIÓN),
 
                 WaitUntil.the(BOTON_REGISTRARME_FINAL, isClickable()),
-                Click.on(BOTON_REGISTRARME_FINAL)
+                JavaScriptClick.on(BOTON_REGISTRARME_FINAL)
         );
     }
 }

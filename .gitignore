@@ -1,12 +1,3 @@
-# --- SERENITY BDD & QA AUTOMATION ---
-target/
-test-output/
-velocity.log
-**/target/
-serenity.properties
-*.log
-
-# --- GRADLE ---
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -15,7 +6,10 @@ build/
 .kotlin
 
 ### IntelliJ IDEA ###
-.idea/
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
 *.iws
 *.iml
 *.ipr
@@ -23,28 +17,21 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-### Eclipse ###
+### Archivos Locales de la IA (Healenium Local Results) ###
+hlm-report/
+healenium/
+.healenium/
+
+### Eclipse / VS Code ###
 .apt_generated
 .classpath
 .factorypath
 .project
 .settings
-.springBeans
-.sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
 .vscode/
 
-### OS Specific ###
+### Sistemas Operativos y Salidas de Serenity ###
 .DS_Store
-Thumbs.db
+/target/
+target/

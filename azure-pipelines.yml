@@ -2,14 +2,21 @@ trigger:
   - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
+  # 1. Levantar la infraestructura de IA (Healenium Backend + Selector Emulator)
+  - script: |
+      docker run -d --name hlm-db -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=healenium postgres:15-alpine
+      docker run -d --name hlm-backend -p 8085:8085 --link hlm-db:db -e SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/healenium healenium/hlm-backend:3.4.3
+    displayName: 'Inicializar Servidor de Auto-Curación e IA Predictiva'
+
+  # 2. Compilar y Ejecutar Automatización con Gradle
   - task: Gradle@3
+    displayName: 'Ejecutar Pruebas y Auto-curar Selectores Rotos'
     inputs:
       gradleWrapperFile: 'gradlew'
-      # Se mantiene intacta tu tarea con el tag que ya funciona
-      tasks: 'clean test'
+      tasks: 'clean test aggregate'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
@@ -18,11 +25,21 @@ steps:
     env:
       GRADLE_OPTS: '-Xmx3072m -XX:MaxMetaspaceSize=512m'
 
-  # REEMPLAZO: Tarea nativa de Azure para publicar el reporte de Serenity
+  # 3. Publicar el Reporte de Serenity en Azure Artifacts
   - task: PublishPipelineArtifact@1
-    displayName: 'Publicar Reporte HTML de Serenity'
+    displayName: 'Publicar Reporte Estadístico de Serenity'
     inputs:
-      targetPath: 'target/site/serenity' # Ruta donde Serenity genera el HTML
-      artifact: 'SerenityReport'         # Nombre del contenedor en Azure
+      targetPath: 'target/site/serenity'
+      artifact: 'SerenityReport'
       publishLocation: 'pipeline'
-    condition: always() # Se ejecuta siempre, sin importar si los tests pasaron o fallaron
+    condition: always()
+
+  # 4. Habilitar la analítica predictiva integrada de Azure DevOps para clasificar Bugs vs Inestabilidad (Flakiness)
+  - task: PublishTestResults@2
+    displayName: 'Analizar e Identificar Flaky Tests con Azure DevOps Test Analytics'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+    condition: always()
