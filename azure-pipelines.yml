@@ -7,11 +7,11 @@ pool:
 steps:
   # 1. Compilar y Ejecutar ÚNICAMENTE el feature de búsqueda de producto usando tags de Cucumber
   - task: Gradle@3
-    displayName: 'Ejecutar Pruebas de Búsqueda de Producto'
+    displayName: 'Ejecutar Pruebas de logout'
     inputs:
       gradleWrapperFile: 'gradlew'
       # Filtramos para que corra exclusivamente los escenarios con la etiqueta @Search
-      tasks: 'clean test aggregate -Dcucumber.filter.tags="@Search"'
+      tasks: 'clean test aggregate -Dcucumber.filter.tags="@Logout"'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
