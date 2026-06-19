@@ -8,55 +8,57 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    // Repositorio oficial para los paquetes de autocuración de Healenium
-    maven { url "https://plugins.gradle.org/m2/" }
-    maven { url 'https://jitpack.io' }
 }
 
 def serenityVersion = '4.1.20'
 
 dependencies {
-    // Serenity Core & Pattern Screenplay
+
     implementation "net.serenity-bdd:serenity-core:${serenityVersion}"
     implementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
     implementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
     implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
 
-    // INTEGRACIÓN IA: Healenium Self-Healing para automatización predictiva
-    implementation 'io.healenium:healenium-web-selenium:3.4.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.10.2'
 
-    // Motores de Pruebas Unificados (JUnit 5 + Cucumber 7)
+    implementation 'org.slf4j:slf4j-simple:2.0.12'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+    testImplementation 'org.junit.platform:junit-platform-suite'
+
+
     testImplementation platform('org.junit:junit-bom:5.10.2')
+
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.junit.vintage:junit-vintage-engine'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
     testImplementation 'org.junit.platform:junit-platform-suite'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.15.0'
-    testImplementation 'junit:junit:4.13.2'
 
-    // Logging y Utilitarios
-    implementation 'org.slf4j:slf4j-simple:2.0.12'
+
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    options.release = 21 // Asegura compatibilidad estricta con Java 21
 }
 
 test {
     useJUnitPlatform()
 
     systemProperty "file.encoding", "UTF-8"
-
-    // Cambiamos a 'remote' para que Serenity rutee las llamadas a través del proxy de IA de Healenium
-    systemProperty "webdriver.driver", "remote"
-    systemProperty "webdriver.remote.url", "http://localhost:8085" // Puerto por defecto del backend IA
+    systemProperty "webdriver.driver", "chrome"
+    systemProperty "webdriver.autodownload", "true"
 
     systemProperties System.getProperties()
 
     testLogging {
         showStandardStreams = true
-        events = ["passed", "skipped", "failed"]
-        exceptionFormat = "full"
+        events = ["passed", "skipped", "failed"] // El formato moderno prefiere usar corchetes y '='
+        exceptionFormat = "full" // <-- Corregido con '='
     }
 }
 

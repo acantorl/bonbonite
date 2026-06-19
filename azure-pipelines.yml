@@ -1,22 +1,18 @@
+
 trigger:
   - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 steps:
-  # 1. Levantar la infraestructura de IA (Healenium Backend + Selector Emulator)
-  - script: |
-      docker run -d --name hlm-db -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=healenium postgres:15-alpine
-      docker run -d --name hlm-backend -p 8085:8085 --link hlm-db:db -e SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/healenium healenium/hlm-backend:3.4.3
-    displayName: 'Inicializar Servidor de Auto-Curación e IA Predictiva'
-
-  # 2. Compilar y Ejecutar Automatización con Gradle
   - task: Gradle@3
-    displayName: 'Ejecutar Pruebas y Auto-curar Selectores Rotos'
+    displayName: 'Ejecutar Pruebas y Generar Reporte de Serenity'
     inputs:
       gradleWrapperFile: 'gradlew'
+      # AGREGADO: Sumamos la tarea 'aggregate' para que Serenity junte los resultados y cree el HTML
       tasks: 'clean test aggregate'
+      options: ''
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
@@ -25,21 +21,12 @@ steps:
     env:
       GRADLE_OPTS: '-Xmx3072m -XX:MaxMetaspaceSize=512m'
 
-  # 3. Publicar el Reporte de Serenity en Azure Artifacts
+  # NUEVO: Tarea para empaquetar y subir el reporte HTML a la pestaña de Azure DevOps
   - task: PublishPipelineArtifact@1
-    displayName: 'Publicar Reporte Estadístico de Serenity'
+    displayName: 'Publicar Reporte HTML de Serenity'
     inputs:
-      targetPath: 'target/site/serenity'
-      artifact: 'SerenityReport'
+      targetPath: 'target/site/serenity' # Ruta estándar donde Serenity guarda el index.html
+      artifact: 'SerenityReport'         # Nombre con el que verás el archivo descargable
       publishLocation: 'pipeline'
-    condition: always()
-
-  # 4. Habilitar la analítica predictiva integrada de Azure DevOps para clasificar Bugs vs Inestabilidad (Flakiness)
-  - task: PublishTestResults@2
-    displayName: 'Analizar e Identificar Flaky Tests con Azure DevOps Test Analytics'
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: '**/TEST-*.xml'
-      mergeTestResults: true
-      failTaskOnFailedTests: true
+    # CRÍTICO: Garantiza que el reporte se publique aunque alguna prueba falle
     condition: always()

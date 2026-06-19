@@ -17,21 +17,33 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-### Archivos Locales de la IA (Healenium Local Results) ###
-hlm-report/
-healenium/
-.healenium/
-
-### Eclipse / VS Code ###
+### Eclipse ###
 .apt_generated
 .classpath
 .factorypath
 .project
 .settings
+.springBeans
+.sts4-cache
 bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
 .vscode/
 
-### Sistemas Operativos y Salidas de Serenity ###
+### Mac OS ###
 .DS_Store
+
 /target/
-target/
+.gradle/
+build/
+.idea/
+*.iml
