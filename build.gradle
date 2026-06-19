@@ -23,7 +23,7 @@ dependencies {
     implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
 
     // INTEGRACIÓN IA: Healenium Self-Healing para automatización predictiva
-    implementation 'com.healenium:healenium-web:3.0.0'
+    implementation 'io.healenium:healenium-web:3.4.2'
 
     // Motores de Pruebas Unificados (JUnit 5 + Cucumber 7)
     testImplementation platform('org.junit:junit-bom:5.10.2')
