@@ -11,7 +11,8 @@ steps:
     inputs:
       gradleWrapperFile: 'gradlew'
       # Filtramos para que corra exclusivamente los escenarios con la etiqueta @Search
-      tasks: 'clean test aggregate -Dcucumber.filter.tags="@Logout"'
+      tasks: 'clean test aggregate'
+      options: '-Dcucumber.filter.tags="@SuccessfulSearch"'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
